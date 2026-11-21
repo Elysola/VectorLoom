@@ -1,0 +1,20 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@v31
+      - run: nix develop --command python3 -m unittest discover -s tests
+      - run: nix develop --command ruff check src tests
+      - run: nix develop --command black --check src tests
+      - run: nix develop --command vectorloom build --root examples/basic
+      - run: nix develop --command vectorloom check --root examples/basic

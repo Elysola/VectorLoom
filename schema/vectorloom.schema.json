@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vectorloom.dev/schema/vectorloom.schema.json",
+  "title": "Vectorloom configuration",
+  "type": "object",
+  "required": ["sizes", "assets"],
+  "properties": {
+    "sizes": {"type": "array", "minItems": 1, "items": {"type": "integer", "minimum": 1}},
+    "output": {"type": "string", "default": "output"},
+    "renderer": {"type": "string", "default": "rsvg-convert"},
+    "fontconfigEnv": {"type": "string"},
+    "forbiddenSvgText": {"type": "array", "items": {"type": "string"}},
+    "fonts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["pattern", "file"],
+        "properties": {"pattern": {"type": "string"}, "file": {"type": "string"}}
+      }
+    },
+    "generators": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["command"],
+        "properties": {
+          "command": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+          "checkCommand": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+        }
+      }
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["project", "name", "source"],
+        "properties": {
+          "project": {"type": "string"},
+          "name": {"type": "string"},
+          "source": {"type": "string"},
+          "sizeMode": {"enum": ["square", "by-width"]},
+          "checks": {"type": "object"}
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "../../schema/vectorloom.schema.json",
+  "sizes": [16, 32, 64],
+  "output": "output",
+  "forbiddenSvgText": ["var("],
+  "assets": [
+    {
+      "project": "demo",
+      "name": "icon",
+      "source": "projects/demo/icon.svg",
+      "sizeMode": "square",
+      "checks": {"width": 64, "transparentCorners": true}
+    }
+  ]
+}

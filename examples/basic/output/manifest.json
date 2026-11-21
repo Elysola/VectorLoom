@@ -1,0 +1,16 @@
+{
+  "projects": {
+    "demo": {
+      "assets": {
+        "icon": {
+          "svg": "icon.svg",
+          "png": [
+            "icon-16.png",
+            "icon-32.png",
+            "icon-64.png"
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "vectorloom"
+version = "0.1.0"
+description = "Reproducible, declarative SVG asset pipelines"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [{ name = "RhenCloud" }]
+dependencies = []
+
+[project.scripts]
+vectorloom = "vectorloom.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/vectorloom"]
