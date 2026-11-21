@@ -77,6 +77,15 @@ def assert_fonts(config: dict[str, Any], env: dict[str, str]) -> None:
             )
 
 
+def source_for_width(root: Path, asset: dict[str, Any], width: int) -> Path:
+    for candidate in asset.get("sources", []):
+        minimum = candidate.get("minWidth", 0)
+        maximum = candidate.get("maxWidth", width)
+        if minimum <= width <= maximum:
+            return root / candidate["source"]
+    return root / asset["source"]
+
+
 def render(
     root: Path, output: Path, config: dict[str, Any], env: dict[str, str]
 ) -> None:
@@ -92,6 +101,7 @@ def render(
         pngs = []
         for width in config["sizes"]:
             filename = f"{name}-{width}.png"
+            render_source = source_for_width(root, asset, width)
             subprocess.run(
                 [
                     renderer,
@@ -99,7 +109,7 @@ def render(
                     str(width),
                     "-o",
                     str(destination / filename),
-                    str(source),
+                    str(render_source),
                 ],
                 env=env,
                 check=True,
@@ -218,10 +228,16 @@ def validate(
     expected_assets: set[tuple[str, str]] = set()
     for asset in config["assets"]:
         source = root / asset["source"]
-        text = source.read_text(encoding="utf-8")
-        for token in forbidden:
-            if token in text:
-                raise VectorloomError(f"Forbidden SVG text {token!r} in {source}")
+        sources = [source] + [
+            root / item["source"] for item in asset.get("sources", [])
+        ]
+        for checked_source in sources:
+            text = checked_source.read_text(encoding="utf-8")
+            for token in forbidden:
+                if token in text:
+                    raise VectorloomError(
+                        f"Forbidden SVG text {token!r} in {checked_source}"
+                    )
         project, name = asset["project"], asset["name"]
         expected_assets.add((project, name))
         for requested_width in config["sizes"]:

@@ -4,7 +4,7 @@ import unittest
 import zlib
 from pathlib import Path
 
-from vectorloom.core import alpha_segments, files_equal, png_rgba
+from vectorloom.core import alpha_segments, files_equal, png_rgba, source_for_width
 
 
 def png(width: int, height: int, pixels: bytes) -> bytes:
@@ -38,6 +38,15 @@ class CoreTests(unittest.TestCase):
             width, height, rgba = png_rgba(path)
         self.assertEqual((width, height), (1, 4))
         self.assertEqual(alpha_segments(rgba[3::4], width, "y", 0, 0, 3, 128), [[1, 2]])
+
+    def test_size_specific_source_selection(self) -> None:
+        root = Path("/project")
+        asset = {
+            "source": "icon.svg",
+            "sources": [{"source": "icon-small.svg", "maxWidth": 32}],
+        }
+        self.assertEqual(source_for_width(root, asset, 16), root / "icon-small.svg")
+        self.assertEqual(source_for_width(root, asset, 48), root / "icon.svg")
 
     def test_tree_comparison_is_byte_exact(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

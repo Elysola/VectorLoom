@@ -38,6 +38,18 @@
           "project": {"type": "string"},
           "name": {"type": "string"},
           "source": {"type": "string"},
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["source"],
+              "properties": {
+                "source": {"type": "string"},
+                "minWidth": {"type": "integer", "minimum": 1},
+                "maxWidth": {"type": "integer", "minimum": 1}
+              }
+            }
+          },
           "sizeMode": {"enum": ["square", "by-width"]},
           "checks": {"type": "object"}
         }

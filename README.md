@@ -32,6 +32,9 @@ The default configuration file is `vectorloom.json` in the project root.
       "project": "brand",
       "name": "icon",
       "source": "projects/brand/icon.svg",
+      "sources": [
+        {"source": "projects/brand/icon-small.svg", "maxWidth": 32}
+      ],
       "sizeMode": "square",
       "checks": {
         "width": 512,
@@ -58,6 +61,7 @@ If `fontconfigEnv` is set, Vectorloom reads that environment variable and uses i
 
 - SVG or upstream geometry is the source of truth; PNG is always derived.
 - Rendering fixes width only and derives height from the SVG viewBox.
+- Assets may select an alternate SVG for bounded output sizes via `sources`.
 - `check` has no output-directory side effects.
 - Alpha checks are decoded directly from PNG; ImageMagick is not required.
 - Project-specific generators and assertions are declared in configuration instead of hard-coded into the core.
